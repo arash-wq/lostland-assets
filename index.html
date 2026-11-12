@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOSTLAND Profile Generator</title>
+
+<style>
+body {
+    background: #101b16;
+    color: white;
+    font-family: Tahoma, sans-serif;
+    padding: 20px;
+    text-align: center;
+}
+
+input {
+    display: block;
+    width: 90%;
+    max-width: 400px;
+    margin: 10px auto;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    background: #c69b43;
+    color: #172016;
+    border: none;
+    padding: 13px 25px;
+    border-radius: 8px;
+    margin: 10px;
+    font-weight: bold;
+}
+
+canvas {
+    width: 100%;
+    max-width: 700px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🏝 LOSTLAND</h2>
+<p>Profile Card Generator</p>
+
+<input id="name" placeholder="نام بازیکن">
+<input id="level" type="number" placeholder="سطح" value="1">
+<input id="wood" type="number" placeholder="چوب">
+<input id="stone" type="number" placeholder="سنگ">
+<input id="food" type="number" placeholder="غذا">
+<input id="gold" type="number" placeholder="طلا">
+<input id="houses" type="number" placeholder="خانه‌ها">
+<input id="farms" type="number" placeholder="مزرعه‌ها">
+
+<button onclick="generate()">ساخت کارت پروفایل</button>
+<button onclick="download()">دانلود تصویر</button>
+
+<br>
+
+<canvas id="card" width="1024" height="1024"></canvas>
+
+<script>
+const canvas = document.getElementById("card");
+const ctx = canvas.getContext("2d");
+
+const bg = new Image();
+bg.src = "profile-bg.png";
+
+let ready = false;
+
+bg.onload = function() {
+    ready = true;
+    generate();
+};
+
+function generate() {
+    if (!ready) {
+        alert("تصویر پس‌زمینه هنوز بارگذاری نشده!");
+        return;
+    }
+
+    ctx.drawImage(bg, 0, 0, 1024, 1024);
+
+    function value(id) {
+        return document.getElementById(id).value || "0";
+    }
+
+    ctx.direction = "rtl";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#ffffff";
+
+    ctx.shadowColor = "#000000";
+    ctx.shadowBlur = 5;
+
+    ctx.font = "bold 42px Tahoma";
+    ctx.fillText(value("name") || "بازیکن LOSTLAND", 512, 130);
+
+    ctx.font = "bold 30px Tahoma";
+
+    ctx.fillText("سطح " + value("level"), 512, 220);
+
+    ctx.font = "25px Tahoma";
+
+    ctx.fillText("🪵 چوب: " + value("wood"), 300, 430);
+    ctx.fillText("🪨 سنگ: " + value("stone"), 720, 430);
+    ctx.fillText("🍖 غذا: " + value("food"), 300, 510);
+    ctx.fillText("🪙 طلا: " + value("gold"), 720, 510);
+
+    ctx.fillText("🏠 خانه‌ها: " + value("houses"), 300, 750);
+    ctx.fillText("🌾 مزرعه‌ها: " + value("farms"), 720, 750);
+
+    ctx.shadowBlur = 0;
+}
+
+function download() {
+    generate();
+
+    const link = document.createElement("a");
+    link.download = "LOSTLAND-profile.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+}
+</script>
+
+</body>
+</html>
